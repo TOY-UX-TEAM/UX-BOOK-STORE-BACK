@@ -10,6 +10,6 @@ public class HelloController {
 
     @GetMapping("hello")
     public String Hello(){
-        return "연결완료";
+        return "연결_완료";
     }
 }
