@@ -1,5 +1,6 @@
 package TOYUXTEAM.BOOKSTORE.domain.bookReview.service;
 
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.UpdateBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.WriteBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.repository.BookReviewRepository;
@@ -27,5 +28,11 @@ public class BookReviewService {
 
 
         bookReviewRepository.save(bookReview);
+    }
+
+    public void update(Long reviewId, UpdateBookReviewReq updateBookReviewReq) {
+        BookReview bookReview = bookReviewRepository.findById(reviewId).orElse(null);
+        bookReview.update(updateBookReviewReq);
+
     }
 }

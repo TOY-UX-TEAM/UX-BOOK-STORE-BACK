@@ -1,14 +1,12 @@
 package TOYUXTEAM.BOOKSTORE.domain.bookReview.controller;
 
 
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.UpdateBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.WriteBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.service.BookReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,5 +20,10 @@ public class BookReviewController {
 
         bookReviewService.write(Long.parseLong(userId), writeBookReviewReq);
 
+    }
+    @PatchMapping("/book-review/{reviewId}")
+    public void updateBookReview(@PathVariable(value = "reviewId") String reviewId, @RequestBody UpdateBookReviewReq updateBookReviewReq)
+    {
+        bookReviewService.update(Long.parseLong(reviewId), updateBookReviewReq);
     }
 }
