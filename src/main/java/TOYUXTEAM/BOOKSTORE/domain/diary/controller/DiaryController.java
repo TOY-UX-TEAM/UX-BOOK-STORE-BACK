@@ -1,4 +1,4 @@
-package TOYUXTEAM.BOOKSTORE.controller;
+package TOYUXTEAM.BOOKSTORE.domain.diary.controller;
 
 
 import lombok.RequiredArgsConstructor;

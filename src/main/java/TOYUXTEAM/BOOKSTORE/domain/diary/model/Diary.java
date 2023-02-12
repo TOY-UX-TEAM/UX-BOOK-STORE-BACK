@@ -1,22 +1,22 @@
-package TOYUXTEAM.BOOKSTORE.domain;
+package TOYUXTEAM.BOOKSTORE.domain.diary.model;
+
+
+import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 
 import javax.persistence.*;
 
 @Entity
-public class BookReview {
+public class Diary {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long Diary_id;
 
     @Column
     private String title;
 
     @Column
     private String content;
-
-    @Column
-    private String author;
 
     @Column
     private String month;
@@ -27,6 +27,5 @@ public class BookReview {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }

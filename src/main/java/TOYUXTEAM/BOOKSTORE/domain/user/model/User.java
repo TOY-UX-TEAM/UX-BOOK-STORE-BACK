@@ -1,5 +1,8 @@
-package TOYUXTEAM.BOOKSTORE.domain;
+package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
+
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
 
 import javax.persistence.*;
 import java.util.ArrayList;

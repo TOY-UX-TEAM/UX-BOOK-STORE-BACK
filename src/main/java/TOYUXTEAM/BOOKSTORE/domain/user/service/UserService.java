@@ -1,4 +1,4 @@
-package TOYUXTEAM.BOOKSTORE.service;
+package TOYUXTEAM.BOOKSTORE.domain.user.service;
 
 
 import org.springframework.stereotype.Service;

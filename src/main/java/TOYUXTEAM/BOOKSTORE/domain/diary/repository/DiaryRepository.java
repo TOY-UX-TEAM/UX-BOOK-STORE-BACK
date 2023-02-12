@@ -1,6 +1,6 @@
-package TOYUXTEAM.BOOKSTORE.repository;
+package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 
-import TOYUXTEAM.BOOKSTORE.domain.Diary;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

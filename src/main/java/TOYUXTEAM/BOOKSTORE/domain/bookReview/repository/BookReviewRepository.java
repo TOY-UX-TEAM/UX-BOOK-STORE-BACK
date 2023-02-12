@@ -1,7 +1,7 @@
-package TOYUXTEAM.BOOKSTORE.repository;
+package TOYUXTEAM.BOOKSTORE.domain.bookReview.repository;
 
 
-import TOYUXTEAM.BOOKSTORE.domain.BookReview;
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package TOYUXTEAM.BOOKSTORE.controller;
+package TOYUXTEAM.BOOKSTORE.domain.bookReview.controller;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class BookReview {
+public class BookReviewController {
 }
