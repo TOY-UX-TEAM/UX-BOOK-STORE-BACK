@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BookReviewController { // aaa
 
-    private BookReviewService bookReviewService;
+    private final BookReviewService bookReviewService;
 
     @PostMapping("/book-review")
     public void writeBookReview(@RequestParam("userid") String userId, @RequestBody WriteBookReviewReq writeBookReviewReq){
