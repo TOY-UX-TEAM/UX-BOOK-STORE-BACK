@@ -16,7 +16,14 @@ public class BookReviewService {
     private final UserRepository userRepository;
 
     public void write(Long userId, WriteBookReviewReq writeBookReviewReq) {
-        User user = new User();
+        User user = User.builder()
+                .id("testId")
+                .email("gkfktkrh153@naver.com")
+                .name("seungYong")
+                .password("123123")
+                .role("manager")
+                .build();
+
         userRepository.save(user);
         BookReview bookReview = BookReview.builder()
                 .title(writeBookReviewReq.getTitle())
