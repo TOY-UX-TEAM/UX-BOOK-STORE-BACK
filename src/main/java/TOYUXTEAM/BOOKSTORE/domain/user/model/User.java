@@ -3,12 +3,15 @@ package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class User {
 
     @Id
@@ -30,6 +33,15 @@ public class User {
 
     @Column
     private String role;
+
+    @Builder
+    public User(String id, String name, String password, String email, String role) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
     @OneToMany(mappedBy = "user")
     private List<BookReview> bookReviews = new ArrayList<>();
