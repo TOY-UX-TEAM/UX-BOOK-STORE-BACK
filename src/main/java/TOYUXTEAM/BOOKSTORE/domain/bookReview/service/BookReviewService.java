@@ -15,7 +15,7 @@ public class BookReviewService {
     private final BookReviewRepository bookReviewRepository;
     private final UserRepository userRepository;
 
-    public void write(Long userId, WriteBookReviewReq writeBookReviewReq) {
+    public void write(WriteBookReviewReq writeBookReviewReq) {
         User user = User.builder()
                 .id("testId")
                 .email("gkfktkrh153@naver.com")
@@ -29,6 +29,7 @@ public class BookReviewService {
                 .title(writeBookReviewReq.getTitle())
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
+                .store(writeBookReviewReq.getStore())
                 .month(writeBookReviewReq.getDay())
                 .day(writeBookReviewReq.getDay())
                 .user(user)

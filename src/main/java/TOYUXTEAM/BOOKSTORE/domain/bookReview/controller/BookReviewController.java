@@ -20,9 +20,9 @@ public class BookReviewController { // aaa
     private final BookReviewService bookReviewService;
 
     @PostMapping("/book-review")
-    public void writeBookReview(@RequestParam("userid") String userId, @RequestBody WriteBookReviewReq writeBookReviewReq){
+    public void writeBookReview(@RequestBody WriteBookReviewReq writeBookReviewReq){
 
-        bookReviewService.write(Long.parseLong(userId), writeBookReviewReq);
+        bookReviewService.write(writeBookReviewReq);
 
     }
     @PatchMapping("/book-review/{reviewId}")

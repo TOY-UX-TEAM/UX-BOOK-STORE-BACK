@@ -3,6 +3,7 @@ package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,9 +48,11 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<BookReview> bookReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Diary> diaries = new ArrayList<>();
 
 }
