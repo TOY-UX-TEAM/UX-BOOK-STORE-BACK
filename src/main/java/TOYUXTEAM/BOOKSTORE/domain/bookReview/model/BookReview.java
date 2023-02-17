@@ -2,9 +2,11 @@ package TOYUXTEAM.BOOKSTORE.domain.bookReview.model;
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.UpdateBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class BookReview {
 

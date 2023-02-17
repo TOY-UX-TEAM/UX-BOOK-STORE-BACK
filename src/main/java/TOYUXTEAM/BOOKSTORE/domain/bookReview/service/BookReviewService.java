@@ -29,6 +29,7 @@ public class BookReviewService {
                 .title(writeBookReviewReq.getTitle())
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
+                .store(writeBookReviewReq.getStore())
                 .month(writeBookReviewReq.getDay())
                 .day(writeBookReviewReq.getDay())
                 .user(user)
