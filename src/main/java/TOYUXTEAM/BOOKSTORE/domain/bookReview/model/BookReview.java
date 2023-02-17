@@ -50,6 +50,7 @@ public class BookReview {
         this.month = month;
         this.day = day;
         this.user = user;
+        user.getBookReviews().add(this);
     }
 
     public void update(UpdateBookReviewReq updateBook){
