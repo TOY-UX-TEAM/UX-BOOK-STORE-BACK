@@ -44,4 +44,9 @@ public class BookReviewService {
         bookReview.update(updateBookReviewReq);
 
     }
+
+    public void delete(Long id) {
+        BookReview bookReview = bookReviewRepository.findById(id).orElse(null);
+        bookReviewRepository.delete(bookReview);
+    }
 }
