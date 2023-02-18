@@ -31,4 +31,10 @@ public class BookReviewController { // aaa
         bookReviewService.update(Long.parseLong(reviewId), updateBookReviewReq);
 
     }
+
+    @DeleteMapping("/bookReview/{id}")
+    public void deleteBookReview(@PathVariable("id") Long id)
+    {
+        bookReviewService.delete(id);
+    }
 }
