@@ -28,7 +28,7 @@ public class DiaryService {
             throw new EntityNotFoundException("존재하지 않는 회원입니다.");
         });
         diaryRepository.save(diary);
-        user.getDiaries().add(diary.getDiary_id());
+        user.getDiaries().add(diary);
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryDto.getId()).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 일기입니다.");
         });
-        user.getDiaries().remove(diaryDto.getId());
+        user.getDiaries().remove(diary);
         diaryRepository.delete(diary);
     }
 }
