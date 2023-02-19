@@ -1,6 +1,7 @@
 package TOYUXTEAM.BOOKSTORE.domain.bookReview.controller;
 
 
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.BookReviewRes;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.UpdateBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.WriteBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.service.BookReviewService;
