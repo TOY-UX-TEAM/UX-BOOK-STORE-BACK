@@ -52,11 +52,16 @@ public class BookReviewController { // aaa
         return bookReviewService.getAll();
     }
 
-    @GetMapping("book-reviewss/{userId}")
+    @GetMapping("book-reviews/{userId}")
     public List<BookReviewRes> getAllBookReviewByUserId(@PathVariable("userId") Long userId){
         return bookReviewService.getAllByUserId(userId);
     }
 
+    @GetMapping("book-reviews/{userId}/{month}/{day}")
+    public List<BookReviewRes> getAllBookReviewByUserId(@PathVariable("userId") Long userId, @PathVariable("month") String month, @PathVariable("day") String day)
+    {
+        return bookReviewService.getAllByUserIdAndDay(userId, month, day);
+    }
 
 
 }
