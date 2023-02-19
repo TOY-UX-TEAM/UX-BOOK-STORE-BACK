@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,10 +42,9 @@ public class BookReviewController { // aaa
     }
 
     @GetMapping("book-reviews")
-    public BookReviewRes getAllBookReview()
+    public List<BookReviewRes> getAllBookReview()
     {
-        bookReviewService.getAll();
-        return bookReviewsRes;
+        return bookReviewService.getAll();
     }
 
 }
