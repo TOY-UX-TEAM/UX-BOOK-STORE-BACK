@@ -52,5 +52,11 @@ public class BookReviewController { // aaa
         return bookReviewService.getAll();
     }
 
+    @GetMapping("book-reviewss/{userId}")
+    public List<BookReviewRes> getAllBookReviewByUserId(@PathVariable("userId") Long userId){
+        return bookReviewService.getAllByUserId(userId);
+    }
+
+
 
 }
