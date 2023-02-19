@@ -20,27 +20,49 @@ public class BookReviewService {
     private final UserRepository userRepository;
 
     public void write(WriteBookReviewReq writeBookReviewReq) {
-        User user = User.builder()
-                .id("testId")
+        User user1 = User.builder()
+                .id("testId1")
                 .email("gkfktkrh153@naver.com")
                 .name("seungYong")
                 .password("123123")
                 .role("manager")
                 .build();
 
-        userRepository.save(user);
-        BookReview bookReview = BookReview.builder()
+        User user2 = User.builder()
+                .id("testId2")
+                .email("gkfktkrh153@naver.com")
+                .name("seungYong")
+                .password("123123")
+                .role("manager")
+                .build();
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        BookReview bookReview1 = BookReview.builder()
                 .title(writeBookReviewReq.getTitle())
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
                 .store(writeBookReviewReq.getStore())
                 .month(writeBookReviewReq.getDay())
                 .day(writeBookReviewReq.getDay())
-                .user(user)
+                .user(user1)
                 .build();
 
 
-        bookReviewRepository.save(bookReview);
+        bookReviewRepository.save(bookReview1);
+
+        BookReview bookReview2 = BookReview.builder()
+                .title(writeBookReviewReq.getTitle())
+                .content(writeBookReviewReq.getContent())
+                .author(writeBookReviewReq.getAuthor())
+                .store(writeBookReviewReq.getStore())
+                .month(writeBookReviewReq.getDay())
+                .day(writeBookReviewReq.getDay())
+                .user(user2)
+                .build();
+
+
+        bookReviewRepository.save(bookReview2);
     }
 
     public void update(Long reviewId, UpdateBookReviewReq updateBookReviewReq) {
@@ -72,5 +94,12 @@ public class BookReviewService {
                 .month(bookReview.getMonth())
                 .day(bookReview.getDay())
                 .build();
+    }
+
+    public List<BookReviewRes> getAllByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return bookReviewRepository.findAllByUser(userId).stream()
+                .map(BookReviewRes::new)
+                .collect(Collectors.toList());
     }
 }
