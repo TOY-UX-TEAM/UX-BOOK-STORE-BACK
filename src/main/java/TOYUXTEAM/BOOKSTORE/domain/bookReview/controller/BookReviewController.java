@@ -40,11 +40,17 @@ public class BookReviewController { // aaa
     {
         bookReviewService.delete(id);
     }
+    @GetMapping("book-review/{reviewId}")
+    public BookReviewRes getBookReview(@PathVariable("reviewId") Long id)
+    {
+        return bookReviewService.get(id);
+    }
 
     @GetMapping("book-reviews")
     public List<BookReviewRes> getAllBookReview()
     {
         return bookReviewService.getAll();
     }
+
 
 }
