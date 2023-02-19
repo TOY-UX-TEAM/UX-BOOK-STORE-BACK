@@ -43,7 +43,7 @@ public class BookReviewService {
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
                 .store(writeBookReviewReq.getStore())
-                .month(writeBookReviewReq.getDay())
+                .month(writeBookReviewReq.getMonth())
                 .day(writeBookReviewReq.getDay())
                 .user(user1)
                 .build();
@@ -56,7 +56,7 @@ public class BookReviewService {
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
                 .store(writeBookReviewReq.getStore())
-                .month(writeBookReviewReq.getDay())
+                .month(writeBookReviewReq.getMonth())
                 .day(writeBookReviewReq.getDay())
                 .user(user2)
                 .build();
