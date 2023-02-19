@@ -37,4 +37,12 @@ public class BookReviewController { // aaa
     {
         bookReviewService.delete(id);
     }
+
+    @GetMapping("book-reviews")
+    public BookReviewRes getAllBookReview()
+    {
+        bookReviewService.getAll();
+        return bookReviewsRes;
+    }
+
 }
