@@ -60,4 +60,17 @@ public class BookReviewService {
                 .collect(Collectors.toList());
 
     }
+
+    public BookReviewRes get(Long id) {
+        BookReview bookReview = bookReviewRepository.findById(id).orElse(null);
+
+        return BookReviewRes.builder()
+                .title(bookReview.getTitle())
+                .content(bookReview.getContent())
+                .store(bookReview.getStore())
+                .author(bookReview.getAuthor())
+                .month(bookReview.getMonth())
+                .day(bookReview.getDay())
+                .build();
+    }
 }
