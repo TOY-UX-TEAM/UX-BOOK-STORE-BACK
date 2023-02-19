@@ -12,15 +12,24 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BookReviewService {
-    private BookReviewRepository bookReviewRepository;
-    private UserRepository userRepository;
+    private final BookReviewRepository bookReviewRepository;
+    private final UserRepository userRepository;
 
-    public void write(Long userId, WriteBookReviewReq writeBookReviewReq) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void write(WriteBookReviewReq writeBookReviewReq) {
+        User user = User.builder()
+                .id("testId")
+                .email("gkfktkrh153@naver.com")
+                .name("seungYong")
+                .password("123123")
+                .role("manager")
+                .build();
+
+        userRepository.save(user);
         BookReview bookReview = BookReview.builder()
                 .title(writeBookReviewReq.getTitle())
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
+                .store(writeBookReviewReq.getStore())
                 .month(writeBookReviewReq.getDay())
                 .day(writeBookReviewReq.getDay())
                 .user(user)
