@@ -20,24 +20,9 @@ public class BookReviewService {
     private final UserRepository userRepository;
 
     public void write(WriteBookReviewReq writeBookReviewReq) {
-        User user1 = User.builder()
-                .id("testId1")
-                .email("gkfktkrh153@naver.com")
-                .name("seungYong")
-                .password("123123")
-                .role("manager")
-                .build();
+        User user1 = userRepository.findById(1L).orElse(null);
+        User user2 = userRepository.findById(2L).orElse(null);
 
-        User user2 = User.builder()
-                .id("testId2")
-                .email("gkfktkrh153@naver.com")
-                .name("seungYong")
-                .password("123123")
-                .role("manager")
-                .build();
-
-        userRepository.save(user1);
-        userRepository.save(user2);
         BookReview bookReview1 = BookReview.builder()
                 .title(writeBookReviewReq.getTitle())
                 .content(writeBookReviewReq.getContent())
