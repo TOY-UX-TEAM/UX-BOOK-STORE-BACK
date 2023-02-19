@@ -1,6 +1,7 @@
 package TOYUXTEAM.BOOKSTORE.domain.bookReview.controller;
 
 
+import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.BookReviewRes;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.UpdateBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.dto.WriteBookReviewReq;
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.service.BookReviewService;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -37,4 +40,28 @@ public class BookReviewController { // aaa
     {
         bookReviewService.delete(id);
     }
+    @GetMapping("book-review/{reviewId}")
+    public BookReviewRes getBookReview(@PathVariable("reviewId") Long id)
+    {
+        return bookReviewService.get(id);
+    }
+
+    @GetMapping("book-reviews")
+    public List<BookReviewRes> getAllBookReview()
+    {
+        return bookReviewService.getAll();
+    }
+
+    @GetMapping("book-reviews/{userId}")
+    public List<BookReviewRes> getAllBookReviewByUserId(@PathVariable("userId") Long userId){
+        return bookReviewService.getAllByUserId(userId);
+    }
+
+    @GetMapping("book-reviews/{userId}/{month}/{day}")
+    public List<BookReviewRes> getAllBookReviewByUserId(@PathVariable("userId") Long userId, @PathVariable("month") String month, @PathVariable("day") String day)
+    {
+        return bookReviewService.getAllByUserIdAndDay(userId, month, day);
+    }
+
+
 }
