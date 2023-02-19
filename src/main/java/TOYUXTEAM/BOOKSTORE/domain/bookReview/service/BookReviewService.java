@@ -97,8 +97,13 @@ public class BookReviewService {
     }
 
     public List<BookReviewRes> getAllByUserId(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
         return bookReviewRepository.findAllByUser(userId).stream()
+                .map(BookReviewRes::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<BookReviewRes> getAllByUserIdAndDay(Long userId, String month, String day) {
+        return bookReviewRepository.findAllByUserIdAndDay(userId,month, day).stream()
                 .map(BookReviewRes::new)
                 .collect(Collectors.toList());
     }
