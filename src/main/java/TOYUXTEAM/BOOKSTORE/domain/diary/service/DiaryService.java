@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class DiaryService {
             throw new EntityNotFoundException("존재하지 않는 회원입니다.");
         });
 
-        Diary diary = new Diary(diaryDto.getTitle(), diaryDto.getContent(), user);
+        Diary diary = new Diary(diaryDto.getTitle(), diaryDto.getContent(), user, LocalDateTime.now());
         diaryRepository.save(diary);
 
         diaryDto.dtoInSetDate(diaryRepository.findById(diary.getDiary_id()).get().getDiary_id(),
