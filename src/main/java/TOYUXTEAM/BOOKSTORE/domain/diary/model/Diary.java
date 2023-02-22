@@ -34,7 +34,7 @@ public class Diary extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void setDiary(String title, String content) {
+    public void diaryInSet(String title, String content) {
         this.title = title;
         this.content = content;
     }
