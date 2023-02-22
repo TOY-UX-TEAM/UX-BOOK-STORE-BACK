@@ -24,52 +24,58 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final UserRepository userRepository;
 
+    public List<DiaryDto> findDiaries(Long userId) {
+        User user = userRepository.findById(userId).get();
+        return user.getDiaries().stream()
+                .map(DiaryDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public DiaryDto saveDiary(Long userId, DiaryDto diaryDto) {
+
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 회원입니다.");
         });
+
         Diary diary = new Diary(diaryDto.getTitle(), diaryDto.getContent(), user);
         diaryRepository.save(diary);
-        diaryDto.setId(diaryRepository.findById(diary.getDiary_id()).get().getDiary_id());
-        diaryDto.setUser(user);
+
+        diaryDto.dtoInSetDate(diaryRepository.findById(diary.getDiary_id()).get().getDiary_id(),
+                user, diary.getCreatedDate());
+
         user.getDiaries().add(diary);
         return diaryDto;
     }
 
     @Transactional
-    public void updateDiary(Long userId, DiaryDto diaryDto) {
+    public void updateDiary(Long userId, Long diaryId, DiaryDto diaryDto) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 회원입니다.");
         });
-        Diary diary = diaryRepository.findById(diaryDto.getId()).orElseThrow(() -> {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 일기입니다.");
         });
-        diary.setDiary(diaryDto.getTitle(), diaryDto.getContent());
+        diary.diaryInSet(diaryDto.getTitle(), diaryDto.getContent());
         user.getDiaries().stream()
-                .filter(u -> u.getDiary_id().equals(diary.getDiary_id()))
-                .forEach(u -> u.setDiary(diaryDto.getTitle(), diaryDto.getContent()));
+                .filter(u -> u.getDiary_id().equals(diaryId))
+                .forEach(u -> u.diaryInSet(diaryDto.getTitle(), diaryDto.getContent()));
+        diaryDto.dtoInSet(diaryId, user);
     }
 
     @Transactional
-    public void deleteDiary(Long userId, DiaryDto diaryDto) {
+    public DiaryDto deleteDiary(Long userId, Long diaryId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 회원입니다.");
         });
-        Diary diary = diaryRepository.findById(diaryDto.getId()).orElseThrow(() -> {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> {
             throw new EntityNotFoundException("존재하지 않는 일기입니다.");
         });
+        DiaryDto diaryDto = new DiaryDto(diary);
         diaryRepository.delete(diary);
         user.getDiaries().remove(diary);
-    }
-
-    public List<DiaryDto> findDiaries(Long userId) {
-
-        User user = userRepository.findById(userId).get();
-        return user.getDiaries().stream()
-                .map(DiaryDto::new)
-                .collect(Collectors.toList());
+        return diaryDto;
     }
 }
