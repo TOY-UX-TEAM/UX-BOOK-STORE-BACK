@@ -3,10 +3,12 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.dto;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class DiaryDto {
 
     private Long id;
@@ -20,6 +22,7 @@ public class DiaryDto {
         title = diary.getTitle();
         content = diary.getContent();
         user = diary.getUser();
+        createdDate = diary.getCreatedDate();
     }
 
     public void dtoInSetDate(Long diaryId, User user, LocalDateTime createdDate) {
