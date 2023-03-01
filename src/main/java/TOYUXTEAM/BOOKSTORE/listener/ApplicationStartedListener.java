@@ -18,12 +18,12 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     }
     @Transactional
     public void setUpDataLoad(){
-        User user1 = User.builder()
+        /*User user1 = User.builder()
                 .id("user1")
                 .email("gkfktkrh153@naver.com")
                 .name("seungYong")
                 .password("123123")
-                .role("manager")
+                .role("user")
                 .build();
 
         User user2 = User.builder()
@@ -35,6 +35,6 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
                 .build();
 
         userRepository.save(user1);
-        userRepository.save(user2);
+        userRepository.save(user2);*/
     }
 }
