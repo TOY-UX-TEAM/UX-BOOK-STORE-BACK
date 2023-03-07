@@ -1,6 +1,7 @@
 package TOYUXTEAM.BOOKSTORE.domain.user.controller;
 
 
+import TOYUXTEAM.BOOKSTORE.domain.user.dto.JwtTokenRes;
 import TOYUXTEAM.BOOKSTORE.domain.user.dto.RegisterUserReq;
 import TOYUXTEAM.BOOKSTORE.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,30 +27,21 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
-    @GetMapping("/user")
-    public String user(){
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        return "user";
-    }
-    @GetMapping("/logout1")
-    public String logout(HttpServletRequest request, HttpServletResponse response)
-    {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null)
-        {
-            new SecurityContextLogoutHandler().logout(request,response,authentication);
-        }
-        System.out.println("logout");
-        return "logout";
-    }
-    @GetMapping("/manager")
-    public String manager(){
-        return "manager";
-    }
-    @PostMapping("/user")
+    @PostMapping("user/signup")
     public void registerUser(@RequestBody RegisterUserReq registerUserReq){
         userService.register(registerUserReq);
 
     }
+
+    @GetMapping("user/signin")
+    public JwtTokenRes login(@RequestBody RegisterUserReq registerUserReq){
+        JwtTokenRes token = userService.login(registerUserReq);
+        return token;
+    }
+
+    @GetMapping("/manager")
+    public String manager(){
+        return "manager";
+    }
+
 }
