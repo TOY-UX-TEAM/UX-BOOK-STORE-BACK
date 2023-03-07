@@ -36,18 +36,7 @@ public class BookReviewService {
 
         bookReviewRepository.save(bookReview1);
 
-        BookReview bookReview2 = BookReview.builder()
-                .title(writeBookReviewReq.getTitle())
-                .content(writeBookReviewReq.getContent())
-                .author(writeBookReviewReq.getAuthor())
-                .store(writeBookReviewReq.getStore())
-                .month(writeBookReviewReq.getMonth())
-                .day(writeBookReviewReq.getDay())
-                .user(user2)
-                .build();
 
-
-        bookReviewRepository.save(bookReview2);
     }
 
     public void update(Long reviewId, UpdateBookReviewReq updateBookReviewReq) {
