@@ -1,8 +1,8 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.dto;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
-import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,31 +12,40 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DiaryDto {
 
-    private Long id;
+    private Long diaryId;
     private String title;
     private String content;
 
     @JsonIgnore
-    private User user;
+    private Long userId;
 
     private LocalDate createdDate;
 
     public DiaryDto(Diary diary) {
-        id = diary.getDiary_id();
-        title = diary.getTitle();
-        content = diary.getContent();
-        user = diary.getUser();
-        createdDate = diary.getCreatedDate();
+        this.diaryId = diary.getId();
+        this.title = diary.getTitle();
+        this.content = diary.getContent();
+        this.userId = diary.getUser().getUser_id();
+        this.createdDate = diary.getCreatedDate();
     }
 
-    public void dtoInSetDate(Long diaryId, User user, LocalDate createdDate) {
+    @QueryProjection
+    public DiaryDto(Long diaryId, String title, String content, Long userId, LocalDate createdDate) {
+        this.diaryId = diaryId;
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
         this.createdDate = createdDate;
-        this.id = diaryId;
-        this.user = user;
     }
 
-    public void dtoInSet(Long diaryId, User user) {
-        this.id = diaryId;
-        this.user = user;
+    public void dtoInSetDate(Long diaryId, Long userId, LocalDate createdDate) {
+        this.createdDate = createdDate;
+        this.diaryId = diaryId;
+        this.userId = userId;
+    }
+
+    public void dtoInSet(Long diaryId, Long userId) {
+        this.diaryId = diaryId;
+        this.userId = userId;
     }
 }

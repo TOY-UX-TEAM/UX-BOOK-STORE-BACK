@@ -25,7 +25,7 @@ public class Diary extends BaseTimeEntity {
      */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long diary_id;
+    private Long id;
 
     @Column
     private String title;
