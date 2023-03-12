@@ -43,9 +43,4 @@ public class DiaryDto {
         this.diaryId = diaryId;
         this.userId = userId;
     }
-
-    public void dtoInSet(Long diaryId, Long userId) {
-        this.diaryId = diaryId;
-        this.userId = userId;
-    }
 }
