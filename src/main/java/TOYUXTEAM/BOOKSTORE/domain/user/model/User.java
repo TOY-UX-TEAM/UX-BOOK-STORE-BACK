@@ -2,7 +2,7 @@ package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
-import TOYUXTEAM.BOOKSTORE.domain.diary.model.Diary;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
