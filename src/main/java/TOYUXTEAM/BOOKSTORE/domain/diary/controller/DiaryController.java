@@ -22,7 +22,7 @@ public class DiaryController {
     public ResponseEntity<Page<DiaryResponse>> getDiariesHome(@PathVariable("id") Long id, @RequestParam("page") int offset) {
         return ResponseEntity.ok().body(diaryService.findDiaries(id, offset, 2));
     }
-
+  
     @GetMapping("/{id}/list")  // page 9
     public ResponseEntity<Page<DiaryResponse>> getDiariesDateBefore(@PathVariable("id") Long id, @RequestParam("page") int offset) {
         return ResponseEntity.ok().body(diaryService.findDiaries(id, offset, 9));

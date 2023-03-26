@@ -42,5 +42,4 @@ public class DiaryResponse {
                 .createdDate(diary.getCreatedDate())
                 .build();
     }
-
 }
