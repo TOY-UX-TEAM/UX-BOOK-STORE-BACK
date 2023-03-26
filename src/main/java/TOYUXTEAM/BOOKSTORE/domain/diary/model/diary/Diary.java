@@ -1,7 +1,7 @@
-package TOYUXTEAM.BOOKSTORE.domain.diary.model;
+package TOYUXTEAM.BOOKSTORE.domain.diary.model.diary;
 
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.base.BaseTimeEntity;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
+@Getter
 @EntityListeners(AuditingEntityListener.class) // 생성일, 수정일
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Diary extends BaseTimeEntity {
 
     /**
@@ -25,17 +25,17 @@ public class Diary extends BaseTimeEntity {
      */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "diary_id")
     private Long id;
 
-    @Column
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column
+    @Column(name = "content", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Diary(String title, String content, User user) {

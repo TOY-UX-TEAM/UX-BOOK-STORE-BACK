@@ -1,10 +1,10 @@
-package TOYUXTEAM.BOOKSTORE.domain.diary.dto;
+package TOYUXTEAM.BOOKSTORE.domain.diary.dto.request;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
 public class DiarySearchCond {
 
     private Long userId;
@@ -14,8 +14,9 @@ public class DiarySearchCond {
     public DiarySearchCond(Long userId) {
         this.userId = userId;
     }
-    public DiarySearchCond(Long userId, LocalDate localDate) {
-        this.userId = userId;
+
+    public DiarySearchCond(Long diaryId, LocalDate localDate) {
+        this.diaryId = diaryId;
         this.localDate = localDate;
     }
 }

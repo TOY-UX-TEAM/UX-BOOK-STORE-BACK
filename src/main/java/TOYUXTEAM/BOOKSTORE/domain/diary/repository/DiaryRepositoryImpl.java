@@ -1,8 +1,8 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.DiaryDto;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.DiarySearchCond;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.QDiaryDto;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.QDiaryResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import static TOYUXTEAM.BOOKSTORE.domain.diary.model.QDiary.*;
+import static TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.QDiary.*;
 import static TOYUXTEAM.BOOKSTORE.domain.user.model.QUser.*;
 
 public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
@@ -27,23 +27,9 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     }
 
     @Override
-    public DiaryDto findByDiaryId(Long diaryId) {
-        return queryFactory
-                .select(new QDiaryDto(
-                        diary.id,
-                        diary.title,
-                        diary.content,
-                        diary.user.user_id,
-                        diary.createdDate))
-                .from(diary)
-                .where(diary.id.eq(diaryId))
-                .fetchOne();
-    }
-
-    @Override
-    public Page<DiaryDto> findByIdDiaries(DiarySearchCond cond, Pageable pageable) {
-        List<DiaryDto> result = queryFactory
-                .select(new QDiaryDto(
+    public Page<DiaryResponse> findByIdDiaries(DiarySearchCond cond, Pageable pageable) {
+        List<DiaryResponse> result = queryFactory
+                .select(new QDiaryResponse(
                         diary.id,
                         diary.title,
                         diary.content,
@@ -69,9 +55,9 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     }
 
     @Override
-    public Page<DiaryDto> findByIdDiaryForDate(DiarySearchCond cond, Pageable pageable) {
-        List<DiaryDto> result = queryFactory
-                .select(new QDiaryDto(
+    public Page<DiaryResponse> findByIdDiaryForDate(DiarySearchCond cond, Pageable pageable) {
+        List<DiaryResponse> result = queryFactory
+                .select(new QDiaryResponse(
                         diary.id,
                         diary.title,
                         diary.content,
