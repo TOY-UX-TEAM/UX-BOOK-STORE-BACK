@@ -3,8 +3,10 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.service;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DiaryService {
 
@@ -44,15 +46,12 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public DiaryResponse findDiary(Long diaryId) {
-        return DiaryResponse.of(diaryRepository.findById(diaryId).get());
+        return DiaryResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다.")));
     }
 
-    @Transactional
     public DiaryResponse createDiary(Long userId, DiaryRequest diaryRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new EntityNotFoundException("존재하지 않는 회원입니다.");
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
 
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user);
         diaryRepository.save(diary);
@@ -61,15 +60,11 @@ public class DiaryService {
         return DiaryResponse.of(diary);
     }
 
-    @Transactional
     public DiaryResponse modifyDiary(Long userId, Long diaryId, DiaryRequest diaryRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new EntityNotFoundException("존재하지 않는 회원입니다.");
-        });
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> {
-            throw new EntityNotFoundException("존재하지 않는 일기입니다.");
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
 
         diary.diaryInSet(diaryRequest.getTitle(), diaryRequest.getContent());
         user.getDiaries().stream()
@@ -79,15 +74,12 @@ public class DiaryService {
         return DiaryResponse.of(diary);
     }
 
-    @Transactional
     public DiaryResponse deleteDiary(Long userId, Long diaryId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new EntityNotFoundException("존재하지 않는 회원입니다.");
-        });
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> {
-            throw new EntityNotFoundException("존재하지 않는 일기입니다.");
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
+
         diaryRepository.delete(diary);
         user.getDiaries().remove(diary);
 
