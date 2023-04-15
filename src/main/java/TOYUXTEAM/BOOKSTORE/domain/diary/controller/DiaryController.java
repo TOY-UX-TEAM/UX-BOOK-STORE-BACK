@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -41,13 +42,13 @@ public class DiaryController {
     }
 
     @PostMapping("/{id}/newdiary")
-    public ResponseEntity<DiaryResponse> createDiary(@PathVariable("id") Long id, @RequestBody @Validated DiaryRequest diaryRequest) {
+    public ResponseEntity<DiaryResponse> createDiary(@PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
         return ResponseEntity.ok().body(diaryService.createDiary(id, diaryRequest));
     }
 
     @PatchMapping("/{id}/diary")
     public ResponseEntity<DiaryResponse> modifyDiary(@RequestParam("diaryid") Long diaryId,
-                                @PathVariable("id") Long id, @RequestBody @Validated DiaryRequest diaryRequest) {
+                                @PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
         return ResponseEntity.ok().body(diaryService.modifyDiary(id, diaryId, diaryRequest));
     }
 
