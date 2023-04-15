@@ -11,7 +11,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@EntityListeners(AuditingEntityListener.class) // 생성일, 수정일
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Diary extends BaseTimeEntity {
 
@@ -25,7 +24,6 @@ public class Diary extends BaseTimeEntity {
      */
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_id")
     private Long id;
 
     @Column(name = "title", nullable = false)
@@ -34,7 +32,7 @@ public class Diary extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

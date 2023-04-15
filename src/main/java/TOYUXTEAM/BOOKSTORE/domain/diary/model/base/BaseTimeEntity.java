@@ -11,8 +11,9 @@ import java.time.LocalDate;
 
 @Getter
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class) // 생성일, 수정일
 public class BaseTimeEntity {
+
     @CreatedDate
     @Column(name = "create_date")
     private LocalDate createdDate;
