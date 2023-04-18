@@ -16,4 +16,9 @@ public class DiaryRequest {
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
+    // test 용
+    public DiaryRequest(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
