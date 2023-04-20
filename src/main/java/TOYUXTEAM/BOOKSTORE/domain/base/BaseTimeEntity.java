@@ -1,4 +1,4 @@
-package TOYUXTEAM.BOOKSTORE.domain.diary.model.base;
+package TOYUXTEAM.BOOKSTORE.domain.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
