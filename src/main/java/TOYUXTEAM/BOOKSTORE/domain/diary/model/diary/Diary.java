@@ -1,11 +1,11 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.model.diary;
 
-import TOYUXTEAM.BOOKSTORE.domain.diary.model.base.BaseTimeEntity;
+import TOYUXTEAM.BOOKSTORE.domain.base.BaseTimeEntity;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -26,15 +26,19 @@ public class Diary extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", length = 50, nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", length = 300, nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diary_content_id")
+    private DiaryContent diaryContent;
 
     public Diary(String title, String content, User user) {
         this.title = title;
@@ -42,7 +46,14 @@ public class Diary extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void diaryInSet(String title, String content) {
+    public Diary(String title, String content, User user, DiaryContent diaryContent) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.diaryContent = diaryContent;
+    }
+
+    public void modify(String title, String content) {
         this.title = title;
         this.content = content;
     }
