@@ -2,9 +2,11 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.service;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,13 @@ class DiaryServiceTest {
 
     @Autowired DiaryService diaryService;
     @Autowired UserRepository userRepository;
+    @Autowired DiaryRepository diaryRepository;
+
+    @BeforeEach
+    public void init() {
+        diaryRepository.deleteAll();
+        userRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("일기 추가")

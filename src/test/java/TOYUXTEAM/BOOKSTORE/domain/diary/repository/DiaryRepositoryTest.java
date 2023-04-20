@@ -7,6 +7,7 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiaryService;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,14 @@ import java.time.LocalDateTime;
 class DiaryRepositoryTest {
 
     @Autowired DiaryRepository diaryRepository;
-    @Autowired DiaryService diaryService;
     @Autowired UserRepository userRepository;
-    
+
+    @BeforeEach
+    public void init() {
+        diaryRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("유저별 전체 일기 페이징 조회")
     public void findByIdDiaries() throws Exception {
@@ -71,15 +77,15 @@ class DiaryRepositoryTest {
         diaryRepository.save(diary4);
 
         //when
-        Pageable pageable = PageRequest.of(0, 3);
-        LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), 4, 18);
+        Pageable pageable = PageRequest.of(1, 3);
+        LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth());
         DiarySearchCond cond = new DiarySearchCond(user.getUser_id(), date);
 
         Page<DiaryResponse> result = diaryRepository.findByIdDiaries(cond, pageable);
 
         //then
         Assertions.assertThat(result.getSize()).isEqualTo(3);
-        Assertions.assertThat(result.getContent()).extracting("title").containsExactly("hi1","hi2","hi3");
+        Assertions.assertThat(result.getContent()).extracting("title").containsExactly("hi4");
     }
 
 }
