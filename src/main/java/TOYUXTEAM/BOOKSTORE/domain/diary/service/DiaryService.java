@@ -12,7 +12,6 @@ import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +62,7 @@ public class DiaryService {
 
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user);
         diaryRepository.save(diary);
-        user.getDiaries().add(diary);
+        user.diariesAdd(diary);
 
         return DiaryResponse.of(diary);
     }
@@ -81,7 +80,7 @@ public class DiaryService {
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, diaryContent);
 
         diaryRepository.save(diary);
-        user.getDiaries().add(diary);
+        user.diariesAdd(diary);
 
         return DiaryResponse.of(diary);
     }
@@ -92,9 +91,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
 
         diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
-        user.getDiaries().stream()
-                .filter(d -> d.getId().equals(diaryId))
-                .forEach(d -> d.modify(diaryRequest.getTitle(), diaryRequest.getContent()));
+        user.diariesModify(diaryId, diaryRequest);
 
         return DiaryResponse.of(diary);
     }
@@ -105,7 +102,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
 
         diaryRepository.delete(diary);
-        user.getDiaries().remove(diary);
+        user.diariesDelete(diary);
 
         return DiaryResponse.of(diary);
     }
