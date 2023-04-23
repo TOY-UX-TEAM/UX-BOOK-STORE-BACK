@@ -1,10 +1,13 @@
 package TOYUXTEAM.BOOKSTORE.domain.user.exception;
 
-import javax.persistence.EntityNotFoundException;
+import TOYUXTEAM.BOOKSTORE.global.exception.baseException;
+import org.springframework.http.HttpStatus;
 
-public class UserException extends EntityNotFoundException {
+public class UserException extends baseException {
+
+    private static final String code = "u0001";
 
     public UserException(String message) {
-        super(message);
+        super(code, HttpStatus.BAD_REQUEST, message);
     }
 }
