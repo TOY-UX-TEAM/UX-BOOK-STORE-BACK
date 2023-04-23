@@ -2,6 +2,7 @@ package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -86,5 +87,19 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void diariesAdd(Diary diary) {
+        this.diaries.add(diary);
+    }
+
+    public void diariesModify(Long diaryId, DiaryRequest diaryRequest) {
+        this.diaries.stream()
+                .filter(d -> d.getId().equals(diaryId))
+                .forEach(d -> d.modify(diaryRequest.getTitle(), diaryRequest.getContent()));
+    }
+
+    public void diariesDelete(Diary diary) {
+        this.diaries.remove(diary);
     }
 }
