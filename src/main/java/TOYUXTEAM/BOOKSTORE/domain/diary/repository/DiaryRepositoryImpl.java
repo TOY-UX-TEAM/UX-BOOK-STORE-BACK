@@ -37,6 +37,7 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                         diary.createdDate.as("createdDate")))
                 .from(diary)
                 .leftJoin(diary.user, user)
+                .fetchJoin()
                 .where(
                         userIdEq(cond.getUserId()))
                 .offset(pageable.getOffset())
@@ -65,6 +66,7 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                         diary.createdDate.as("createdDate")))
                 .from(diary)
                 .leftJoin(diary.user, user)
+                .fetchJoin()
                 .where(
                         userIdEq(cond.getUserId()),
                         createDateEq(cond.getLocalDate()))
