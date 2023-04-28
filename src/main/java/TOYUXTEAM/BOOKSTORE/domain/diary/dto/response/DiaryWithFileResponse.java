@@ -36,6 +36,17 @@ public class DiaryWithFileResponse {
         this.fileName = fileName;
     }
 
+    public static DiaryWithFileResponse of(Long diaryId, String title, String content, Long userId, LocalDate createdDate, String fileName) {
+        return DiaryWithFileResponse.builder()
+                .diaryId(diaryId)
+                .title(title)
+                .content(content)
+                .userId(userId)
+                .createdDate(createdDate)
+                .fileName(fileName)
+                .build();
+    }
+
     public static DiaryWithFileResponse of(final Diary diary) {
         return DiaryWithFileResponse.builder()
                 .diaryId(diary.getId())
