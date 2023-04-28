@@ -2,6 +2,7 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.controller;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -47,24 +50,35 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.find(diaryId));
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/new")
-    public ResponseEntity<DiaryResponse> createDiary(@PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
-        return ResponseEntity.ok().body(diaryService.create(id, diaryRequest));
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/{id}/new")
+//    public ResponseEntity<DiaryResponse> createDiary(@PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
+//        return ResponseEntity.ok().body(diaryService.create(id, diaryRequest));
+//    }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/newfile")
-    public ResponseEntity<DiaryResponse> createDiaryWithFile(@PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) throws IOException {
-        return ResponseEntity.ok().body(diaryService.createWithFile(id, diaryRequest));
+    @PostMapping("/{id}/new-file")
+    public ResponseEntity<DiaryWithFileResponse> createDiaryWithFile(@PathVariable("id") Long id,
+                                                                     @RequestPart("title") @NotNull String title, @RequestPart("content") @NotNull String content,
+                                                                     @RequestPart("file") MultipartFile file) throws IOException {
+        DiaryRequest diaryRequest = new DiaryRequest(title, content);
+        return ResponseEntity.ok().body(diaryService.baseCreate(id, diaryRequest, file));
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}/diary")
-    public ResponseEntity<DiaryResponse> modifyDiary(@RequestParam("diaryid") Long diaryId,
-                                @PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
-        return ResponseEntity.ok().body(diaryService.modify(id, diaryId, diaryRequest));
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @PatchMapping("/{id}/diary")
+//    public ResponseEntity<DiaryResponse> modifyDiary(@RequestParam("diaryid") Long diaryId,
+//                                                     @PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
+//        return ResponseEntity.ok().body(diaryService.modify(id, diaryId, diaryRequest));
+//    }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @PatchMapping("/{id}/diary-file")
+//    public ResponseEntity<DiaryResponse> modifyDiaryFile(@RequestParam("diaryid") Long diaryId,
+//                                                     @PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest,
+//                                                     @RequestPart("file") MultipartFile file) throws IOException) {
+//        return ResponseEntity.ok().body(diaryService.modifyFile(id, diaryId, diaryRequest));
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/diary")

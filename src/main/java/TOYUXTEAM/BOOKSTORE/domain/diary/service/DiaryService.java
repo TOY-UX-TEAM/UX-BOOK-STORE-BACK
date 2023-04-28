@@ -3,9 +3,11 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.service;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
+import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
@@ -31,6 +33,8 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final UserRepository userRepository;
+    private final DiaryContentRepository diaryContentRepository;
+
 
     @Transactional(readOnly = true)
     public Page<DiaryResponse> findAll(Long userId, int offset, int pageSize) {
@@ -56,33 +60,45 @@ public class DiaryService {
         return DiaryResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다.")));
     }
 
-    public DiaryResponse create(Long userId, DiaryRequest diaryRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
 
-        Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user);
-        diaryRepository.save(diary);
-        user.diariesAdd(diary);
+    public DiaryWithFileResponse baseCreate(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
 
-        return DiaryResponse.of(diary);
+        if (file.getSize() == 0) {
+            return SimpleCreate(userId, diaryRequest);
+        } else {
+            return createWithFile(userId, diaryRequest, file);
+        }
     }
 
-    public DiaryResponse createWithFile(Long userId, DiaryRequest diaryRequest) throws IOException {
 
+
+    private DiaryWithFileResponse createWithFile(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
 
         DiaryContent diaryContent = DiaryContent.builder()
-                .name(createStoreFileName(diaryRequest.getFile().getOriginalFilename()))
-                .type(diaryRequest.getFile().getContentType())
-                .fileData(diaryRequest.getFile().getBytes())
+                .name(createStoreFileName(file.getOriginalFilename()))
+                .type(file.getContentType())
+                .fileData(file.getBytes())
                 .build();
-
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, diaryContent);
+        user.diariesAdd(diary);
 
+        diaryContentRepository.save(diaryContent);
+        diaryRepository.save(diary);
+
+        return DiaryWithFileResponse.of(diary);
+    }
+
+    public DiaryWithFileResponse SimpleCreate(Long userId, DiaryRequest diaryRequest) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+
+        Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, null);
         diaryRepository.save(diary);
         user.diariesAdd(diary);
 
-        return DiaryResponse.of(diary);
+        return DiaryWithFileResponse.of(diary.getId(), diary.getTitle(), diary.getContent(), diary.getUser().getUser_id(), diary.getCreatedDate(), null);
     }
 
     public DiaryResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) {
