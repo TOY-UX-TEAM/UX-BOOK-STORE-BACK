@@ -3,6 +3,7 @@ package TOYUXTEAM.BOOKSTORE.domain.user.model;
 
 import TOYUXTEAM.BOOKSTORE.domain.bookReview.model.BookReview;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -93,10 +94,22 @@ public class User implements UserDetails {
         this.diaries.add(diary);
     }
 
+    public void diariesFileDelete(Long diaryId, DiaryRequest diaryRequest) {
+        this.diaries.stream()
+                .filter(d -> d.getId().equals(diaryId))
+                .forEach(d -> d.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), null));
+    }
+
     public void diariesModify(Long diaryId, DiaryRequest diaryRequest) {
         this.diaries.stream()
                 .filter(d -> d.getId().equals(diaryId))
                 .forEach(d -> d.modify(diaryRequest.getTitle(), diaryRequest.getContent()));
+    }
+
+    public void diariesModifyWithFile(Long diaryId, DiaryRequest diaryRequest, DiaryContent diaryContent) {
+        this.diaries.stream()
+                .filter(d -> d.getId().equals(diaryId))
+                .forEach(d -> d.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent));
     }
 
     public void diariesDelete(Diary diary) {

@@ -8,7 +8,8 @@ spring:
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
-#  Mysql
+
+#    Mysql
     url: jdbc:mysql://127.0.0.1:3306/uuzz_dev?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=UTC
     username: root
     password:

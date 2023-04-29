@@ -2,7 +2,9 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.QDiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.QDiaryWithFileResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,17 +29,17 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     }
 
     @Override
-    public Page<DiaryResponse> findByIdDiaries(DiarySearchCond cond, Pageable pageable) {
-        List<DiaryResponse> result = queryFactory
-                .select(new QDiaryResponse(
+    public Page<DiaryWithFileResponse> findByIdDiaries(DiarySearchCond cond, Pageable pageable) {
+        List<DiaryWithFileResponse> result = queryFactory
+                .select(new QDiaryWithFileResponse(
                         diary.id,
                         diary.title,
                         diary.content,
                         diary.user.user_id.as("userId"),
-                        diary.createdDate.as("createdDate")))
+                        diary.createdDate.as("createdDate"),
+                        diary.diaryContent.name))
                 .from(diary)
                 .leftJoin(diary.user, user)
-                .fetchJoin()
                 .where(
                         userIdEq(cond.getUserId()))
                 .offset(pageable.getOffset())
@@ -56,17 +58,17 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     }
 
     @Override
-    public Page<DiaryResponse> findByIdDiaryForDate(DiarySearchCond cond, Pageable pageable) {
-        List<DiaryResponse> result = queryFactory
-                .select(new QDiaryResponse(
+    public Page<DiaryWithFileResponse> findByIdDiaryForDate(DiarySearchCond cond, Pageable pageable) {
+        List<DiaryWithFileResponse> result = queryFactory
+                .select(new QDiaryWithFileResponse(
                         diary.id,
                         diary.title,
                         diary.content,
                         diary.user.user_id.as("userId"),
-                        diary.createdDate.as("createdDate")))
+                        diary.createdDate.as("createdDate"),
+                        diary.diaryContent.name))
                 .from(diary)
                 .leftJoin(diary.user, user)
-                .fetchJoin()
                 .where(
                         userIdEq(cond.getUserId()),
                         createDateEq(cond.getLocalDate()))

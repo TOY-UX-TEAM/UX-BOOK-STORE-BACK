@@ -3,7 +3,6 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.dto.request;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
