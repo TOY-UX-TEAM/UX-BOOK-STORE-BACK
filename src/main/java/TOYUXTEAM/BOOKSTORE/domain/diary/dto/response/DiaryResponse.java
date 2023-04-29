@@ -23,8 +23,6 @@ public class DiaryResponse {
 
     private LocalDate createdDate;
 
-    private String fileName;
-
     @Builder
     @QueryProjection
     public DiaryResponse(Long diaryId, String title, String content, Long userId, LocalDate createdDate) {

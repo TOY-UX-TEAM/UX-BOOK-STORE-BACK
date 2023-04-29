@@ -6,6 +6,7 @@ import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -36,7 +37,7 @@ public class Diary extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "diary_content_id")
     private DiaryContent diaryContent;
 
@@ -56,5 +57,12 @@ public class Diary extends BaseTimeEntity {
     public void modify(String title, String content) {
         this.title = title;
         this.content = content;
+        this.diaryContent = null;
+    }
+
+    public void modifyWithFile(String title, String content, DiaryContent diaryContent) {
+        this.title = title;
+        this.content = content;
+        this.diaryContent = diaryContent;
     }
 }
