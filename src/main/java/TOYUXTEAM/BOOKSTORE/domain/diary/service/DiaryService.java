@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,7 +38,7 @@ public class DiaryService {
 
 
     @Transactional(readOnly = true)
-    public Page<DiaryResponse> findAll(Long userId, int offset, int pageSize) {
+    public Page<DiaryWithFileResponse> findAll(Long userId, int offset, int pageSize) {
 
         Pageable pageable = PageRequest.of(offset, pageSize);
         DiarySearchCond diarySearchCond = new DiarySearchCond(userId);
@@ -46,7 +47,7 @@ public class DiaryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DiaryResponse> findByDate(Long userId, Long month, Long day, int offset) {
+    public Page<DiaryWithFileResponse> findByDate(Long userId, Long month, Long day, int offset) {
 
         Pageable pageable = PageRequest.of(offset, 9);
         LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), month.intValue(), day.intValue());
@@ -56,13 +57,13 @@ public class DiaryService {
     }
 
     @Transactional(readOnly = true)
-    public DiaryResponse find(Long diaryId) {
-        return DiaryResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다.")));
+    public DiaryWithFileResponse find(Long diaryId) {
+        return DiaryWithFileResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다.")));
     }
 
 
 
-    public DiaryWithFileResponse baseCreate(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
+    public DiaryWithFileResponse create(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
 
         if (file.getSize() == 0) {
             return SimpleCreate(userId, diaryRequest);
@@ -72,6 +73,17 @@ public class DiaryService {
     }
 
 
+
+    public DiaryWithFileResponse SimpleCreate(Long userId, DiaryRequest diaryRequest) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+
+        Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, null);
+        diaryRepository.save(diary);
+        user.diariesAdd(diary);
+
+        return DiaryWithFileResponse.of(diary.getId(), diary.getTitle(), diary.getContent(), diary.getUser().getUser_id(), diary.getCreatedDate(), null);
+    }
 
     private DiaryWithFileResponse createWithFile(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
@@ -90,26 +102,44 @@ public class DiaryService {
         return DiaryWithFileResponse.of(diary);
     }
 
-    public DiaryWithFileResponse SimpleCreate(Long userId, DiaryRequest diaryRequest) {
+    public DiaryWithFileResponse showModify(Long id, Long diaryId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
-
-        Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, null);
-        diaryRepository.save(diary);
-        user.diariesAdd(diary);
-
-        return DiaryWithFileResponse.of(diary.getId(), diary.getTitle(), diary.getContent(), diary.getUser().getUser_id(), diary.getCreatedDate(), null);
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
+        return DiaryWithFileResponse.of(diary);
     }
 
-    public DiaryResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) {
+    public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
 
-        diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
-        user.diariesModify(diaryId, diaryRequest);
+        if (file.getSize() == 0) {
+            if (diary.getDiaryContent() != null) {
+                diaryContentRepository.delete(diary.getDiaryContent());
+                diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
+                user.diariesFileDelete(diaryId, diaryRequest);
+            } else {
+                diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
+                user.diariesModify(diaryId, diaryRequest);
+            }
+        } else {
+            DiaryContent diaryContent = DiaryContent.builder()
+                    .name(createStoreFileName(file.getOriginalFilename()))
+                    .type(file.getContentType())
+                    .fileData(file.getBytes())
+                    .build();
+            if (diary.getDiaryContent() == null) {
+                diaryContentRepository.save(diaryContent);
+                diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
+                user.diariesModifyWithFile(diaryId, diaryRequest, diaryContent);
+            } else if (diary.getDiaryContent().getFileData() != diaryContent.getFileData()) {
+                diaryContentRepository.save(diaryContent);
+                diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
+                user.diariesModifyWithFile(diaryId, diaryRequest, diaryContent);
+            }
+        }
 
-        return DiaryResponse.of(diary);
+        return DiaryWithFileResponse.of(diary);
     }
 
     public DiaryResponse delete(Long userId, Long diaryId) {
@@ -122,7 +152,6 @@ public class DiaryService {
 
         return DiaryResponse.of(diary);
     }
-
     private String createStoreFileName(String originalFilename) {
 
         String ext = extractExt(originalFilename);
@@ -130,6 +159,7 @@ public class DiaryService {
 
         return uuid + "." + ext;
     }
+
     private String extractExt(String originalFilename) {
 
         int pos = originalFilename.lastIndexOf(".");
