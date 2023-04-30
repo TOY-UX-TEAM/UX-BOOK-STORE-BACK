@@ -14,6 +14,7 @@ import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -40,6 +41,8 @@ public class DiaryService {
     @Transactional(readOnly = true)
     public Page<DiaryWithFileResponse> findAll(Long userId, int offset, int pageSize) {
 
+        userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수없습니다."));
+
         Pageable pageable = PageRequest.of(offset, pageSize);
         DiarySearchCond diarySearchCond = new DiarySearchCond(userId);
 
@@ -48,6 +51,8 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public Page<DiaryWithFileResponse> findByDate(Long userId, Long month, Long day, int offset) {
+
+        userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수없습니다."));
 
         Pageable pageable = PageRequest.of(offset, 9);
         LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), month.intValue(), day.intValue());
@@ -58,7 +63,9 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public DiaryWithFileResponse find(Long diaryId) {
-        return DiaryWithFileResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다.")));
+        DiaryWithFileResponse of = DiaryWithFileResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다.")));
+        log.info("Response data: {}", of);
+        return of;
     }
 
 
@@ -66,7 +73,7 @@ public class DiaryService {
     public DiaryWithFileResponse create(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
 
         if (file.getSize() == 0) {
-            return SimpleCreate(userId, diaryRequest);
+            return createSimple(userId, diaryRequest);
         } else {
             return createWithFile(userId, diaryRequest, file);
         }
@@ -74,19 +81,20 @@ public class DiaryService {
 
 
 
-    public DiaryWithFileResponse SimpleCreate(Long userId, DiaryRequest diaryRequest) {
+    public DiaryWithFileResponse createSimple(Long userId, DiaryRequest diaryRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
 
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, null);
         diaryRepository.save(diary);
         user.diariesAdd(diary);
 
-        return DiaryWithFileResponse.of(diary.getId(), diary.getTitle(), diary.getContent(), diary.getUser().getUser_id(), diary.getCreatedDate(), null);
+        return DiaryWithFileResponse.of(diary);
     }
 
     private DiaryWithFileResponse createWithFile(Long userId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
 
         DiaryContent diaryContent = DiaryContent.builder()
                 .name(createStoreFileName(file.getOriginalFilename()))
@@ -104,14 +112,14 @@ public class DiaryService {
 
     public DiaryWithFileResponse showModify(Long id, Long diaryId) {
 
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
         return DiaryWithFileResponse.of(diary);
     }
 
     public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest, MultipartFile file) throws IOException {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
         if (file.getSize() == 0) {
             if (diary.getDiaryContent() != null) {
@@ -144,8 +152,8 @@ public class DiaryService {
 
     public DiaryResponse delete(Long userId, Long diaryId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("존재하지 않는 회원입니다."));
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("존재하지 않는 일기입니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
         diaryRepository.delete(diary);
         user.diariesDelete(diary);
