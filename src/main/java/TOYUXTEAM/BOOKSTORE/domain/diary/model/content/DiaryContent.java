@@ -1,6 +1,5 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.model.content;
 
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -2,11 +2,9 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.service;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
-import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;

@@ -3,7 +3,6 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.service;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
-import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
@@ -14,8 +13,6 @@ import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
 
 @Service
 @Transactional
