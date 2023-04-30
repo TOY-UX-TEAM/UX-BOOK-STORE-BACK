@@ -2,6 +2,7 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
@@ -51,7 +52,7 @@ class DiaryRepositoryTest {
         Pageable pageable = PageRequest.of(0, 3);
         DiarySearchCond cond = new DiarySearchCond(user.getUser_id());
 
-        Page<DiaryResponse> result = diaryRepository.findByIdDiaries(cond, pageable);
+        Page<DiaryWithFileResponse> result = diaryRepository.findByIdDiaries(cond, pageable);
 
         //then
         Assertions.assertThat(result.getSize()).isEqualTo(3);
@@ -80,7 +81,7 @@ class DiaryRepositoryTest {
         LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth());
         DiarySearchCond cond = new DiarySearchCond(user.getUser_id(), date);
 
-        Page<DiaryResponse> result = diaryRepository.findByIdDiaries(cond, pageable);
+        Page<DiaryWithFileResponse> result = diaryRepository.findByIdDiaries(cond, pageable);
 
         //then
         Assertions.assertThat(result.getSize()).isEqualTo(3);

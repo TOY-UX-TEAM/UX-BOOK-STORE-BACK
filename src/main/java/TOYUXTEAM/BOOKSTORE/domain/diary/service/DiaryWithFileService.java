@@ -53,6 +53,7 @@ public class DiaryWithFileService {
                 .type(diaryRequest.getFile().getContentType())
                 .fileData(diaryRequest.getFile().getBytes())
                 .build();
+
         if (diary.getDiaryContent() == null) {
             diaryContentRepository.save(diaryContent);
             diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
@@ -61,6 +62,9 @@ public class DiaryWithFileService {
             diaryContentRepository.save(diaryContent);
             diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
             user.diariesModifyWithFile(diaryId, diaryRequest, diaryContent);
+        } else {
+            diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
+            user.diariesModify(diaryId, diaryRequest);
         }
 
         return DiaryWithFileResponse.of(diary);
