@@ -4,6 +4,7 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiaryService;
+import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiarySimpleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -48,28 +50,15 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.find(diaryId));
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @PostMapping("/{id}/new")
-//    public ResponseEntity<DiaryResponse> createDiary(@PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
-//        return ResponseEntity.ok().body(diaryService.create(id, diaryRequest));
-//    }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/new")
     public ResponseEntity<DiaryWithFileResponse> createDiary(@PathVariable("id") Long id,
-                                                                     @RequestPart("title") @NotNull String title, @RequestPart("content") @NotNull String content,
-                                                                     @RequestPart("file") MultipartFile file) throws IOException {
-        DiaryRequest diaryRequest = new DiaryRequest(title, content);
-        return ResponseEntity.ok().body(diaryService.create(id, diaryRequest, file));
+                                                             @RequestPart("title") @NotNull String title, @RequestPart("content") @NotNull String content,
+                                                             @RequestPart("file") Optional<MultipartFile> file) throws IOException {
+        DiaryRequest diaryRequest = new DiaryRequest(title, content, file.orElse(null));
+        return ResponseEntity.ok().body(diaryService.create(id, diaryRequest));
     }
 
-
-//    @PreAuthorize("isAuthenticated()")
-//    @PatchMapping("/{id}/diary")
-//    public ResponseEntity<DiaryResponse> modifyDiary(@RequestParam("diaryid") Long diaryId,
-//                                                     @PathVariable("id") Long id, @RequestBody @Valid DiaryRequest diaryRequest) {
-//        return ResponseEntity.ok().body(diaryService.modify(id, diaryId, diaryRequest));
-//    }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/diary")
     public ResponseEntity<DiaryWithFileResponse> showModify(@PathVariable Long id, @RequestParam("diaryid") Long diaryId) {
@@ -78,16 +67,16 @@ public class DiaryController {
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}/diary")
-    public ResponseEntity<DiaryWithFileResponse> modify(@RequestParam("diaryid") Long diaryId, @PathVariable("id") Long id,
+    public ResponseEntity<DiaryWithFileResponse> modifyDiary(@RequestParam("diaryid") Long diaryId, @PathVariable("id") Long id,
                                                         @RequestPart("title") @NotNull String title, @RequestPart("content") @NotNull String content,
-                                                        @RequestPart("file") MultipartFile file) throws IOException {
-        DiaryRequest diaryRequest = new DiaryRequest(title, content);
-        return ResponseEntity.ok().body(diaryService.modify(id, diaryId, diaryRequest, file));
+                                                        @RequestPart("file") Optional<MultipartFile> file) throws IOException {
+        DiaryRequest diaryRequest = new DiaryRequest(title, content, file.orElse(null));
+        return ResponseEntity.ok().body(diaryService.modify(id, diaryId, diaryRequest));
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/diary")
-    public ResponseEntity<DiaryResponse> deleteDiary(@PathVariable("id") Long id, @RequestParam("diaryid") Long diaryId){
+    public ResponseEntity<DiaryWithFileResponse> deleteDiary(@PathVariable("id") Long id, @RequestParam("diaryid") Long diaryId){
         return ResponseEntity.ok().body(diaryService.delete(id, diaryId));
     }
 }

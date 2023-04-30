@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -27,8 +28,23 @@ public class DiaryContent {
 
     @Builder
     public DiaryContent(String name, String type, byte[] fileData) {
-        this.name = name;
+        this.name = createStoreFileName(name);
         this.type = type;
         this.fileData = fileData;
+    }
+
+    private String createStoreFileName(String originalFilename) {
+
+        String ext = extractExt(originalFilename);
+        String uuid = UUID.randomUUID().toString();
+
+        return uuid + "." + ext;
+    }
+
+    private String extractExt(String originalFilename) {
+
+        int pos = originalFilename.lastIndexOf(".");
+
+        return originalFilename.substring(pos + 1);
     }
 }
