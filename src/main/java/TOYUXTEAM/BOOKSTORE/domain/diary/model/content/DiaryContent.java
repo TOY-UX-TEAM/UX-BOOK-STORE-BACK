@@ -1,16 +1,18 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.model.content;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.UUID;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class DiaryContent {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +28,15 @@ public class DiaryContent {
     @Column(name = "file_data")
     private byte[] fileData;
 
-    @Builder
-    public DiaryContent(String name, String type, byte[] fileData) {
-        this.name = createStoreFileName(name);
-        this.type = type;
-        this.fileData = fileData;
+    public static DiaryContent of(final MultipartFile file) throws IOException {
+        return DiaryContent.builder()
+                .name(createStoreFileName(file.getOriginalFilename()))
+                .type(file.getContentType())
+                .fileData(file.getBytes())
+                .build();
     }
 
-    private String createStoreFileName(String originalFilename) {
+    private static String createStoreFileName(String originalFilename) {
 
         String ext = extractExt(originalFilename);
         String uuid = UUID.randomUUID().toString();
@@ -41,7 +44,7 @@ public class DiaryContent {
         return uuid + "." + ext;
     }
 
-    private String extractExt(String originalFilename) {
+    private static String extractExt(String originalFilename) {
 
         int pos = originalFilename.lastIndexOf(".");
 

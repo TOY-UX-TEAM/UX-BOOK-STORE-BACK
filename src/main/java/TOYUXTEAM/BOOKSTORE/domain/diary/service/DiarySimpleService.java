@@ -37,7 +37,7 @@ public class DiarySimpleService {
         return DiaryWithFileResponse.of(diary);
     }
 
-    public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) throws IOException {
+    public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
