@@ -54,7 +54,6 @@ public class User implements UserDetails {
     @JsonIgnore
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

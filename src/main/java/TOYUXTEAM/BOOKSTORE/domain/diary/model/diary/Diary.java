@@ -6,7 +6,6 @@ import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
