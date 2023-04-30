@@ -3,7 +3,6 @@ package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
-import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiaryService;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
