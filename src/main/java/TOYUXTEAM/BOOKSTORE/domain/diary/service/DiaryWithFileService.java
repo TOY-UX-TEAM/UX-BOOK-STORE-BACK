@@ -29,11 +29,8 @@ public class DiaryWithFileService {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
 
-        DiaryContent diaryContent = DiaryContent.builder()
-                .name(diaryRequest.getFile().getOriginalFilename())
-                .type(diaryRequest.getFile().getContentType())
-                .fileData(diaryRequest.getFile().getBytes())
-                .build();
+        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile());
+
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, diaryContent);
         user.diariesAdd(diary);
 
@@ -48,11 +45,7 @@ public class DiaryWithFileService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
-        DiaryContent diaryContent = DiaryContent.builder()
-                .name(diaryRequest.getFile().getOriginalFilename())
-                .type(diaryRequest.getFile().getContentType())
-                .fileData(diaryRequest.getFile().getBytes())
-                .build();
+        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile());
 
         if (diary.getDiaryContent() == null) {
             diaryContentRepository.save(diaryContent);
