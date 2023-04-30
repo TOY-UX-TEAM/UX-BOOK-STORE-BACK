@@ -16,7 +16,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
-      max-file-size: 5MB
+      max-file-size: 3MB
+      resolve-lazily: true
   jpa:
     hibernate:
       ddl-auto: create
