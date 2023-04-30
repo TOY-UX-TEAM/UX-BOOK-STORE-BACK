@@ -26,6 +26,9 @@ public class SecurityConfig {
 
     private final TokenProvider jwtProvider;
 
+    private static final String[] DOC_URLS = {
+            "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,12 +40,14 @@ public class SecurityConfig {
         return (web) ->{
             web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
             web.ignoring().antMatchers("/favicon.ico", "/resources/**", "/error");
+            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                    .and().ignoring().antMatchers(DOC_URLS);
         };
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors().and();
         http
                 .httpBasic().disable()
                 .csrf().disable()
@@ -51,11 +56,14 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/user/signin").permitAll() // 해당 API에 대해서는 모든 요청을 허가
                 .antMatchers("/user/signup").permitAll() // 해당 API에 대해서는 모든 요청을 허가
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated() // 이 밖에 모든 요청에 대해 인증을 필요로함.
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
 
@@ -67,7 +75,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
-
     }
-
 }
