@@ -18,6 +18,5 @@ public interface BookReviewRepository extends JpaRepository<BookReview, Long> {
     @Query("select b from BookReview b where b.user.user_id = :userId")
     List<BookReview> findAllByUser(@Param("userId") Long userId);
 
-    @Query("select b from BookReview b where b.user.user_id = :userId and b.month = :month and b.day = :day")
-    List<BookReview> findAllByUserIdAndDay(@Param("userId") Long userId,@Param("month") String month,@Param("day") String day);
+/*    List<BookReview> findAllByUserIdAndDay(@Param("userId") Long userId,@Param("date") String date);*/
 }

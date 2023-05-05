@@ -11,7 +11,5 @@ public class UpdateBookReviewReq {
     private String content;
     private String store;
     private String author;
-    private String month;
-    private String day;
 
 }

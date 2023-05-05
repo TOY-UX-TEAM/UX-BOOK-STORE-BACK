@@ -28,8 +28,6 @@ public class BookReviewService {
                 .content(writeBookReviewReq.getContent())
                 .author(writeBookReviewReq.getAuthor())
                 .store(writeBookReviewReq.getStore())
-                .month(writeBookReviewReq.getMonth())
-                .day(writeBookReviewReq.getDay())
                 .user(user1)
                 .build();
 
@@ -65,8 +63,6 @@ public class BookReviewService {
                 .content(bookReview.getContent())
                 .store(bookReview.getStore())
                 .author(bookReview.getAuthor())
-                .month(bookReview.getMonth())
-                .day(bookReview.getDay())
                 .build();
     }
 
@@ -76,9 +72,9 @@ public class BookReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<BookReviewRes> getAllByUserIdAndDay(Long userId, String month, String day) {
-        return bookReviewRepository.findAllByUserIdAndDay(userId,month, day).stream()
+/*    public List<BookReviewRes> getAllByUserIdAndDay(Long userId) {
+        return bookReviewRepository.findAllByUserIdAndDay(userId).stream()
                 .map(BookReviewRes::new)
                 .collect(Collectors.toList());
-    }
+    }*/
 }
