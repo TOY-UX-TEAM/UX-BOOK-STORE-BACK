@@ -36,7 +36,7 @@ public class UserServiceImpl implements  UserService{
     public void register(RegisterUserReq registerUserReq) {
         User user = User.builder()
                 .id(registerUserReq.getId())
-                .name(registerUserReq.getName())
+                .username(registerUserReq.getName())
                 .email(registerUserReq.getEmail())
                 .password(passwordEncoder.encode(registerUserReq.getPassword()))
                 .roles(Collections.singletonList(registerUserReq.getRole()))
