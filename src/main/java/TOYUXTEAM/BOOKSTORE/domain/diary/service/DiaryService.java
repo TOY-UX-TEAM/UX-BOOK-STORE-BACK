@@ -59,12 +59,11 @@ public class DiaryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DiaryWithFileResponse> findByDate(Long userId, Long month, Long day, int offset) {
+    public Page<DiaryWithFileResponse> findByDate(Long userId, LocalDate date, int offset) {
 
         userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수없습니다."));
 
         Pageable pageable = PageRequest.of(offset, 9);
-        LocalDate date = LocalDate.of(LocalDateTime.now().getYear(), month.intValue(), day.intValue());
         DiarySearchCond diarySearchCond = new DiarySearchCond(userId, date);
 
         return diaryRepository.findByIdDiaryForDate(diarySearchCond, pageable);
