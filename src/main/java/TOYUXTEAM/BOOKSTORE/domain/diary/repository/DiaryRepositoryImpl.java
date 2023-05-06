@@ -39,7 +39,7 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                         diary.content,
                         diary.user.user_id.as("user_id"),
                         diary.createdDate.as("create_date"),
-                        diary.diaryContent != null ? diary.diaryContent.name : null))
+                        diary.diaryContent.filePath != null ? diary.diaryContent.filePath : null))
                 .from(diary)
                 .leftJoin(diary.user, user)
                 .leftJoin(diary.diaryContent, diaryContent)
@@ -69,7 +69,7 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                         diary.content,
                         diary.user.user_id.as("user_id"),
                         diary.createdDate.as("create_date"),
-                        diary.diaryContent != null ? diary.diaryContent.name : null))
+                        diary.diaryContent.filePath != null ? diary.diaryContent.filePath : null))
                 .from(diary)
                 .leftJoin(diary.user, user)
                 .leftJoin(diary.diaryContent, diaryContent)

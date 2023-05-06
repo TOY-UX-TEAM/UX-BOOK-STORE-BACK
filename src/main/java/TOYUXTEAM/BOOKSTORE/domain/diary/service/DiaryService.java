@@ -4,19 +4,25 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
+import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
+import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -27,6 +33,7 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final UserRepository userRepository;
+    private final DiaryContentRepository diaryContentRepository;
 
     private final DiarySimpleService diarySimpleService;
     private final DiaryWithFileService diaryWithFileService;
@@ -71,7 +78,13 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public DiaryWithFileResponse find(Long diaryId) {
-        return DiaryWithFileResponse.of(diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다.")));
+
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
+        if (diary.getDiaryContent() != null) {
+            return DiaryWithFileResponse.of(diary, diary.getDiaryContent().getFilePath());
+        } else {
+            return DiaryWithFileResponse.of(diary);
+        }
     }
 
     public DiaryWithFileResponse showModify(Long id, Long diaryId) {

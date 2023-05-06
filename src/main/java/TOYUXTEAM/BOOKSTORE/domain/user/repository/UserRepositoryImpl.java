@@ -40,8 +40,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
             return new UserCountResponse(cond.getUserId(), result);
         }
-
-
     }
 
     private BooleanExpression userIdEq(Long userId) {

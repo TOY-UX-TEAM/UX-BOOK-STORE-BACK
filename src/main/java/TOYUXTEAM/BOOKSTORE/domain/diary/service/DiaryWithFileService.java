@@ -8,13 +8,17 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotMatchException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 @Service
 @Transactional
@@ -25,11 +29,14 @@ public class DiaryWithFileService {
     protected final UserRepository userRepository;
     protected final DiaryContentRepository diaryContentRepository;
 
+    @Value("${file.path}")
+    private String filePath;
+
     public DiaryWithFileResponse create(Long userId, DiaryRequest diaryRequest) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
 
-        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile());
+        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile(), filePath);
 
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, diaryContent);
         user.diariesAdd(diary);
@@ -37,7 +44,7 @@ public class DiaryWithFileService {
         diaryContentRepository.save(diaryContent);
         diaryRepository.save(diary);
 
-        return DiaryWithFileResponse.of(diary);
+        return DiaryWithFileResponse.of(diary, diary.getDiaryContent().getFilePath());
     }
 
     public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) throws IOException {
@@ -45,21 +52,18 @@ public class DiaryWithFileService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
-        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile());
+        DiaryContent diaryContent = DiaryContent.of(diaryRequest.getFile(), filePath);
 
-        if (diary.getDiaryContent() == null) {
+        if (!diary.getUser().equals(user)) {
+            if (diary.getDiaryContent() != null) {
+                diaryContentRepository.delete(diary.getDiaryContent());
+            }
             diaryContentRepository.save(diaryContent);
             diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
-            user.diariesModifyWithFile(diaryId, diaryRequest, diaryContent);
-        } else if (diary.getDiaryContent().getFileData() != diaryContent.getFileData()) {
-            diaryContentRepository.save(diaryContent);
-            diary.modifyWithFile(diaryRequest.getTitle(), diaryRequest.getContent(), diaryContent);
-            user.diariesModifyWithFile(diaryId, diaryRequest, diaryContent);
+
+            return DiaryWithFileResponse.of(diary, diary.getDiaryContent().getFilePath());
         } else {
-            diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
-            user.diariesModify(diaryId, diaryRequest);
+            throw new UserNotMatchException("권한이 없습니다.");
         }
-
-        return DiaryWithFileResponse.of(diary);
     }
 }
