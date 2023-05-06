@@ -7,6 +7,7 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotMatchException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
@@ -39,15 +40,16 @@ public class DiarySimpleService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
-        if (diary.getDiaryContent() != null) {
-            diaryContentRepository.delete(diary.getDiaryContent());
-            diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
-            user.diariesFileDelete(diaryId, diaryRequest);
+        if (!diary.getUser().equals(user)) {
+            if (diary.getDiaryContent() != null) {
+                diaryContentRepository.delete(diary.getDiaryContent());
+                diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
+            } else {
+                diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
+            }
+            return DiaryWithFileResponse.of(diary);
         } else {
-            diary.modify(diaryRequest.getTitle(), diaryRequest.getContent());
-            user.diariesModify(diaryId, diaryRequest);
+            throw new UserNotMatchException("권한이 없습니다.");
         }
-
-        return DiaryWithFileResponse.of(diary);
     }
 }

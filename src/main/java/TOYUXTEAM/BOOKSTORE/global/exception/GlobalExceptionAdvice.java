@@ -3,6 +3,7 @@ package TOYUXTEAM.BOOKSTORE.global.exception;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotMatchException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,14 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorResponse> UserHandleException(UserException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        log.error("[exceptionHandle] ex", e);
+        ErrorResponse errorResponse = new ErrorResponse(errorCode.getCode(), e.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotMatchException.class)
+    public ResponseEntity<ErrorResponse> UserNotMatchHandleException(UserNotMatchException e) {
         ErrorCode errorCode = e.getErrorCode();
         log.error("[exceptionHandle] ex", e);
         ErrorResponse errorResponse = new ErrorResponse(errorCode.getCode(), e.getMessage());

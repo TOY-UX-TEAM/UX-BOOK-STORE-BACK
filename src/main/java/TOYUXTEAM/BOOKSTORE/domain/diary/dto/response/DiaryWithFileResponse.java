@@ -23,17 +23,17 @@ public class DiaryWithFileResponse {
 
     private LocalDate createdDate;
 
-    private String fileName;
+    private String filePath;
 
     @Builder
     @QueryProjection
-    public DiaryWithFileResponse(Long diaryId, String title, String content, Long userId, LocalDate createdDate, String fileName) {
+    public DiaryWithFileResponse(Long diaryId, String title, String content, Long userId, LocalDate createdDate, String filePath) {
         this.diaryId = diaryId;
         this.title = title;
         this.content = content;
         this.userId = userId;
         this.createdDate = createdDate;
-        this.fileName = fileName;
+        this.filePath = filePath;
     }
 
     public static DiaryWithFileResponse of(final Diary diary) {
@@ -41,10 +41,18 @@ public class DiaryWithFileResponse {
                 .diaryId(diary.getId())
                 .title(diary.getTitle())
                 .content(diary.getContent())
-                .userId(diary.getUser().getUser_id())
                 .createdDate(diary.getCreatedDate())
-                .fileName(diary.getDiaryContent() != null ? diary.getDiaryContent().getName() : null)
+                .filePath(null)
                 .build();
     }
 
+    public static DiaryWithFileResponse of(final Diary diary, String filePath) {
+        return DiaryWithFileResponse.builder()
+                .diaryId(diary.getId())
+                .title(diary.getTitle())
+                .content(diary.getContent())
+                .createdDate(diary.getCreatedDate())
+                .filePath(filePath)
+                .build();
+    }
 }

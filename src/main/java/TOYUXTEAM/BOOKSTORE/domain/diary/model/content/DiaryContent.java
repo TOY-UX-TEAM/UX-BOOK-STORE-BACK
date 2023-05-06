@@ -1,13 +1,16 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.model.content;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 @Entity
+@Slf4j
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,15 +26,19 @@ public class DiaryContent {
     @Column(name = "type")
     private String type;
 
-    @Lob
-    @Column(name = "file_data")
-    private byte[] fileData;
+    private String filePath;
 
-    public static DiaryContent of(final MultipartFile file) throws IOException {
+    public static DiaryContent of(final MultipartFile file, String filePath) throws IOException {
+
+        String storeFileName = createStoreFileName(file.getOriginalFilename());
+
+        log.info("file path: {}, {}", filePath, storeFileName);
+        file.transferTo(new File(filePath + storeFileName));
+
         return DiaryContent.builder()
-                .name(createStoreFileName(file.getOriginalFilename()))
+                .name(storeFileName)
                 .type(file.getContentType())
-                .fileData(file.getBytes())
+                .filePath(filePath + storeFileName)
                 .build();
     }
 

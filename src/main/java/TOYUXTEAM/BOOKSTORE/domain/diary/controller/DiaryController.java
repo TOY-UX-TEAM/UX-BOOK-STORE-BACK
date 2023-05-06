@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +49,7 @@ public class DiaryController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/diary")
-    public ResponseEntity<DiaryWithFileResponse> getDiary(@RequestParam("diaryid") Long diaryId) {
+    public ResponseEntity<DiaryWithFileResponse> getDiary(@RequestParam("diaryid") Long diaryId) throws IOException {
         return ResponseEntity.ok().body(diaryService.find(diaryId));
     }
 
@@ -56,6 +58,7 @@ public class DiaryController {
     public ResponseEntity<DiaryWithFileResponse> createDiary(@PathVariable("id") Long id,
                                                              @RequestPart("jsonRequest") @Valid DiaryRequest diaryRequest,
                                                              @RequestPart("file") Optional<MultipartFile> file) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         diaryRequest.setFile(file.orElse(null));
         return ResponseEntity.ok().body(diaryService.create(id, diaryRequest));
     }
