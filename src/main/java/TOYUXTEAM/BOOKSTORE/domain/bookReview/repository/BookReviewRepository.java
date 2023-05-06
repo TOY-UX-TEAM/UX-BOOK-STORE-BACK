@@ -13,10 +13,7 @@ import java.util.List;
 
 @Repository
 public interface BookReviewRepository extends JpaRepository<BookReview, Long> {
-
-
-    @Query("select b from BookReview b where b.user.user_id = :userId")
-    List<BookReview> findAllByUser(@Param("userId") Long userId);
+    List<BookReview> findByUserId(Long userId);
 
 /*    List<BookReview> findAllByUserIdAndDay(@Param("userId") Long userId,@Param("date") String date);*/
 }

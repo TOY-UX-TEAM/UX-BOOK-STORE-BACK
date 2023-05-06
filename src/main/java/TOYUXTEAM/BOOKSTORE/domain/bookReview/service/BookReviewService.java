@@ -67,7 +67,7 @@ public class BookReviewService {
     }
 
     public List<BookReviewRes> getAllByUserId(Long userId) {
-        return bookReviewRepository.findAllByUser(userId).stream()
+        return bookReviewRepository.findByUserId(userId).stream()
                 .map(BookReviewRes::new)
                 .collect(Collectors.toList());
     }
