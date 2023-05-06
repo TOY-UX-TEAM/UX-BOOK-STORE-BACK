@@ -1,13 +1,14 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.dto.request;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryRequest {
 
