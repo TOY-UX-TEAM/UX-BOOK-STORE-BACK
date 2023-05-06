@@ -1,13 +1,12 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.controller;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiaryRequest;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiaryService;
-import TOYUXTEAM.BOOKSTORE.domain.diary.service.DiarySimpleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Slf4j
@@ -38,10 +38,10 @@ public class DiaryController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/list/{month}/{day}/diary") // page 9
+    @GetMapping("/{id}/list/") // page 9
     public ResponseEntity<Page<DiaryWithFileResponse>> getDiariesForDate(@PathVariable("id") Long id,
-                                            @PathVariable("month") Long month, @PathVariable("day") Long day, @RequestParam("page") int offset) {
-        return ResponseEntity.ok().body(diaryService.findByDate(id, month, day, offset));
+                                                                         @RequestParam("date") @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate date, @RequestParam("page") int offset) {
+        return ResponseEntity.ok().body(diaryService.findByDate(id, date, offset));
     }
 
     @PreAuthorize("isAuthenticated()")
