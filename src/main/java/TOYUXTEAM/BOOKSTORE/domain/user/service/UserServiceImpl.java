@@ -5,7 +5,7 @@ import TOYUXTEAM.BOOKSTORE.domain.user.dto.JwtTokenRes;
 import TOYUXTEAM.BOOKSTORE.domain.user.dto.RegisterUserReq;
 import TOYUXTEAM.BOOKSTORE.domain.user.dto.request.UserSearchCond;
 import TOYUXTEAM.BOOKSTORE.domain.user.dto.response.UserCountResponse;
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserExistException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import TOYUXTEAM.BOOKSTORE.security.provider.TokenProvider;
@@ -34,12 +34,14 @@ public class UserServiceImpl implements  UserService{
     @Override
     @Transactional
     public void register(RegisterUserReq registerUserReq) {
+        if(userRepository.findById(registerUserReq.getId()).isPresent())
+            throw new UserExistException("이미 존재하는 아이디입니다.");
         User user = User.builder()
                 .id(registerUserReq.getId())
-                .username(registerUserReq.getName())
+                .username(registerUserReq.getUsername())
                 .email(registerUserReq.getEmail())
                 .password(passwordEncoder.encode(registerUserReq.getPassword()))
-                .roles(Collections.singletonList(registerUserReq.getRole()))
+                .roles(Collections.singletonList(registerUserReq.getRoles()))
                 .build();
 
         userRepository.save(user);
@@ -50,7 +52,7 @@ public class UserServiceImpl implements  UserService{
         // 인증객체 생성 (authenticated 값은 false)
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         // 실제 인증 과정으로 authenticate실행 시 CustomUserDetailsService의 loadByUserName실행
-        return tokenProvider.generateToken(authenticate, registerUserReq.getRole());
+        return tokenProvider.generateToken(authenticate, registerUserReq.getRoles());
     }
 
     public UserCountResponse findByDate(Long id, Long month, Long day) {

@@ -2,7 +2,8 @@ package TOYUXTEAM.BOOKSTORE.global.exception;
 
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserExistException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
 
-    @ExceptionHandler(UserException.class)
-    public ResponseEntity<ErrorResponse> UserHandleException(UserException e) {
+    @ExceptionHandler({UserNotFoundException.class,  UserExistException.class})
+    public ResponseEntity<ErrorResponse> UserHandleException(baseException e) {
         ErrorCode errorCode = e.getErrorCode();
         log.error("[exceptionHandle] ex", e);
         ErrorResponse errorResponse = new ErrorResponse(errorCode.getCode(), e.getMessage());
