@@ -8,7 +8,7 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotFoundException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class DiaryService {
     @Transactional(readOnly = true)
     public Page<DiaryWithFileResponse> findAll(Long userId, int offset, int pageSize) {
 
-        userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수없습니다."));
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("회원을 찾을 수없습니다."));
 
         Pageable pageable = PageRequest.of(offset, pageSize);
         DiarySearchCond diarySearchCond = new DiarySearchCond(userId);
@@ -68,7 +68,7 @@ public class DiaryService {
     @Transactional(readOnly = true)
     public Page<DiaryWithFileResponse> findByDate(Long userId, LocalDate date, int offset) {
 
-        userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수없습니다."));
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("회원을 찾을 수없습니다."));
 
         Pageable pageable = PageRequest.of(offset, 9);
         DiarySearchCond diarySearchCond = new DiarySearchCond(userId, date);
@@ -95,7 +95,7 @@ public class DiaryService {
 
     public DiaryWithFileResponse delete(Long userId, Long diaryId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("회원을 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
         diaryRepository.delete(diary);
