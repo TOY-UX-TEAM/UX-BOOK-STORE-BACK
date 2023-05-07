@@ -6,7 +6,7 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.exception.DiaryException;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotFoundException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
@@ -24,8 +24,7 @@ public class DiarySimpleService {
     protected final DiaryContentRepository diaryContentRepository;
 
     public DiaryWithFileResponse create(Long userId, DiaryRequest diaryRequest) {
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("회원을 찾을 수없습니다."));
 
         Diary diary = new Diary(diaryRequest.getTitle(), diaryRequest.getContent(), user, null);
         diaryRepository.save(diary);
@@ -36,7 +35,7 @@ public class DiarySimpleService {
 
     public DiaryWithFileResponse modify(Long userId, Long diaryId, DiaryRequest diaryRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException("회원을 찾을 수 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("회원을 찾을 수없습니다."));
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException("일기를 찾을 수 없습니다."));
 
         if (diary.getDiaryContent() != null) {
