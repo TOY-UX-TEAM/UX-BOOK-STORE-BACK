@@ -7,13 +7,8 @@ import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.DiaryContent;
 import TOYUXTEAM.BOOKSTORE.domain.diary.model.diary.Diary;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryContentRepository;
 import TOYUXTEAM.BOOKSTORE.domain.diary.repository.DiaryRepository;
-<<<<<<< HEAD
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserException;
-import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotMatchException;
-=======
-
 import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotFoundException;
->>>>>>> dd435ea (Refactor : UserException 구체적인 예외로 변경)
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotMatchException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

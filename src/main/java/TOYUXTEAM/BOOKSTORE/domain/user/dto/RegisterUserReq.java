@@ -1,18 +1,24 @@
 package TOYUXTEAM.BOOKSTORE.domain.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RegisterUserReq {
 
+    @Builder
+    public RegisterUserReq(String id, String username, String password, String email, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
     private String id;
-    private String name;
+    private String username;
     private String password;
     private String email;
     private String role;

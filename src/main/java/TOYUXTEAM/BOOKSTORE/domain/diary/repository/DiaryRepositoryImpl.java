@@ -1,11 +1,8 @@
 package TOYUXTEAM.BOOKSTORE.domain.diary.repository;
 
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.request.DiarySearchCond;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.DiaryWithFileResponse;
-import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.QDiaryResponse;
 import TOYUXTEAM.BOOKSTORE.domain.diary.dto.response.QDiaryWithFileResponse;
-import TOYUXTEAM.BOOKSTORE.domain.diary.model.content.QDiaryContent;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
