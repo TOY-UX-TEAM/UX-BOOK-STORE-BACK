@@ -35,7 +35,7 @@ class UserServiceImplTest {
                 .email("gkfktkrh153@naver.com")
                 .username("user1")
                 .password("1234")
-                .roles("ROLE_USER")
+                .role("ROLE_USER")
                 .build();
         assertThrows(UserExistException.class, ()-> userService.register(userReq));
 

@@ -1,5 +1,6 @@
 package TOYUXTEAM.BOOKSTORE.security.service;
 
+import TOYUXTEAM.BOOKSTORE.domain.user.exception.UserNotFoundException;
 import TOYUXTEAM.BOOKSTORE.domain.user.model.User;
 import TOYUXTEAM.BOOKSTORE.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findById(userId).orElse(null);//
-        if (user == null)
-            throw new UsernameNotFoundException("UsernameNotFoundException");
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
         return user;
     }
