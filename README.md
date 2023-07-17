@@ -1,4 +1,4 @@
-## 나만의 감성적인 독립서점, 유유자적
+# 나만의 감성적인 독립서점, 유유자적
 
 <img width="485" alt="image" src="https://github.com/miIlicon/uuzz-backend/assets/26915908/d06b32db-b8c7-4554-8b3c-a41385a9981f">
 
